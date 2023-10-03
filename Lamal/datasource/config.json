@@ -1,0 +1,130 @@
+{
+  "primes": [
+    {
+      "id": "l2011",
+      "year": 2011,
+      "path_ch": "2011/Praemien_CH.csv",
+      "path_eu": "2011/Praemien_EU.csv",
+      "encoding_ch": "latin-1",
+      "encoding_eu": "latin-1",
+      "sep": ";"
+    },
+    {
+      "id": "l2012",
+      "year": 2012,
+      "path_ch": "2012/Praemien_CH.csv",
+      "path_eu": "2012/Praemien_EU.csv",
+      "encoding_ch": "latin-1",
+      "encoding_eu": "latin-1",
+      "sep": ";"
+    },
+    {
+      "id": "l2013",
+      "year": 2013,
+      "path_ch": "2013/Praemien_CH.csv",
+      "path_eu": "2013/Praemien_EU.csv",
+      "encoding_ch": "latin-1",
+      "encoding_eu": "latin-1",
+      "sep": ";"
+    },
+    {
+      "id": "l2014",
+      "year": 2014,
+      "path_ch": "2014/Praemien_CH.csv",
+      "path_eu": "2014/Praemien_EU.csv",
+      "encoding_ch": "latin-1",
+      "encoding_eu": "latin-1",
+      "sep": ";"
+    },
+    {
+      "id": "l2015",
+      "year": 2015,
+      "path_ch": "2015/PrДmien_CH.csv",
+      "path_eu": "2015/PrДmien_EU.csv",
+      "encoding_ch": "utf-8",
+      "encoding_eu": "utf-8",
+      "sep": ","
+    },
+    {
+      "id": "l2016",
+      "year": 2016,
+      "path_ch": "2016/PrДmien_CH.csv",
+      "path_eu": "2016/PrДmien_EU.csv",
+      "encoding_ch": "latin-1",
+      "encoding_eu": "utf-8",
+      "sep": ","
+    },
+    {
+      "id": "l2017",
+      "year": 2017,
+      "path_ch": "2017/PrДmien_CH.csv",
+      "path_eu": "2017/PrДmien_EU.csv",
+      "encoding_ch": "utf-8",
+      "encoding_eu": "utf-8",
+      "sep": ","
+    },
+    {
+      "id": "l2018",
+      "year": 2018,
+      "path_ch": "2018/PrДmien_CH.csv",
+      "path_eu": "2018/PrДmien_EU.csv",
+      "encoding_ch": "latin-1",
+      "encoding_eu": "latin-1",
+      "sep": ";"
+    },
+    {
+      "id": "l2019",
+      "year": 2019,
+      "path_ch": "2019/PrДmien_CH.csv",
+      "path_eu": "2019/PrДmien_EU.csv",
+      "encoding_ch": "latin-1",
+      "encoding_eu": "latin-1",
+      "sep": ";"
+    },
+    {
+      "id": "l2020",
+      "year": 2020,
+      "path_ch": "2020/PrДmien_CH.csv",
+      "path_eu": "2020/PrДmien_EU.csv",
+      "encoding_ch": "utf-8",
+      "encoding_eu": "latin-1",
+      "sep": ","
+    },
+    {
+      "id": "l2021",
+      "year": 2021,
+      "path_ch": "2021/PrДmien_CH.csv",
+      "path_eu": "2021/PrДmien_EU.csv",
+      "encoding_ch": "utf-8",
+      "encoding_eu": "utf-8",
+      "sep": ","
+    },
+    {
+      "id": "l2022",
+      "year": 2022,
+      "path_ch": "2022/PrДmien_CH.csv",
+      "path_eu": "2022/PrДmien_EU.csv",
+      "encoding_ch": "utf-8",
+      "encoding_eu": "utf-8",
+      "sep": ","
+    },
+    {
+      "id": "l2023",
+      "year": 2023,
+      "path_ch": "2023/Prämien_CH.csv",
+      "path_eu": "2023/Prämien_EU.csv",
+      "encoding_ch": "latin-1",
+      "encoding_eu": "latin-1",
+      "sep": ";"
+    },
+    {
+      "id": "l2024",
+      "year": 2024,
+      "path_ch": "2024/Prämien_CH.csv",
+      "path_eu": "2024/Prämien_EU.csv",
+      "encoding_ch": "latin-1",
+      "encoding_eu": "latin-1",
+      "sep": ";"
+    }
+  ]
+}
