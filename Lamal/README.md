@@ -22,12 +22,12 @@ If you have no reason to regenerate the data, just use "export.7z"
 Download and prepare raw data
 
 1) Go in the "datasource" folder.
-2) Download data from https://opendata.swiss/fr/dataset/health-insurance-premiums and unzip it in different folders called 2011, 2012, ... 2024.
+2) Download data from https://opendata.swiss/fr/dataset/health-insurance-premiums and unzip it in different folders called 2011, 2012, ... 2025.
 3) Fix some issues with names if necessary.
 4) You have a file called "config.json", verify that all names are well defined and at the right position.
 
 Process data
-1) You need "pandas" and "numpy", on ubuntu/debian - sudo apt-get install python3-pandas python3-numpy
+1) You need "pandas" and "numpy", on ubuntu/debian - sudo apt-get install python3-pandas python3-numpy python3-ipython
 2) You may need other libraries, please send me a mail if I forgot any.
 3) python3 process.py
 4) Data should be available in the export folder
@@ -39,4 +39,4 @@ Copy all content of this folder to the /tmp folder.
 Make all data available to mysql process using : chmod 777 /tmp/*.csv
 
 You can import all data in a mysql/mariadb database using this script.
-Connect to mysql and run the following commands: CreateAndImportData.sql
+Connect to mysql and run the following sql requests one after the other: CreateAndImportData.sql

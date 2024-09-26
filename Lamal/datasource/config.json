@@ -120,8 +120,17 @@
     {
       "id": "l2024",
       "year": 2024,
-      "path_ch": "2024/Prämien_CH.csv",
-      "path_eu": "2024/Prämien_EU.csv",
+      "path_ch": "2024/PrДmien_CH.csv",
+      "path_eu": "2024/PrДmien_EU.csv",
+      "encoding_ch": "latin-1",
+      "encoding_eu": "latin-1",
+      "sep": ";"
+    },
+    {
+      "id": "l2025",
+      "year": 2025,
+      "path_ch": "2025/Prämien_CH.csv",
+      "path_eu": "2025/Prämien_EU.csv",
       "encoding_ch": "latin-1",
       "encoding_eu": "latin-1",
       "sep": ";"
