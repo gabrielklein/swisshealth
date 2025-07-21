@@ -1,31 +1,25 @@
 #!/bin/bash
-
 set -euo pipefail
 
-declare -A files=(
-  [Archiv_Praemien_2011.zip]="https://bag-files.opendata.swiss/owncloud/index.php/s/8PI18oOi1X59uO3/download"
-  [Archiv_Praemien_2012.zip]="https://bag-files.opendata.swiss/owncloud/index.php/s/hRqm0C0CZPasv1u/download"
-  [Archiv_Praemien_2013.zip]="https://bag-files.opendata.swiss/owncloud/index.php/s/lFnpuNJl84hzucs/download"
-  [Archiv_Praemien_2014.zip]="http://bar-opendata-ch.s3.amazonaws.com/ch.bag/Praemien/Archiv_Praemien_2014.zip"
-  [Archiv_Praemien_2015.zip]="https://bag-files.opendata.swiss/owncloud/index.php/s/UL36nzYZuRrkHDA/download"
-  [Archiv_Praemien_2016.zip]="https://bag-files.opendata.swiss/owncloud/index.php/s/8cUU1beTqcNtk8H/download"
-  [Archiv_Praemien_2017.zip]="https://bag-files.opendata.swiss/owncloud/index.php/s/3FgYDP6uFhfe2jV/download"
-  [Archiv_Praemien_2018.zip]="https://bag-files.opendata.swiss/owncloud/index.php/s/vx33hTA4J0ZcwYf/download"
-  [Archiv_Praemien_2019.zip]="https://bag-files.opendata.swiss/owncloud/index.php/s/JtGQs8Bkp61oCL1/download"
-  [Archiv_Praemien_2020.zip]="https://bag-files.opendata.swiss/owncloud/index.php/s/yTDcw7dBRnfwZj2/download"
-  [Archiv_Praemien_2021.zip]="https://bag-files.opendata.swiss/owncloud/index.php/s/NaxmnWZEdiwopNr/download"
-  [Archiv_Praemien_2022.zip]="https://bag-files.opendata.swiss/owncloud/index.php/s/nfcN79zT5eaJ7yn/download"
-  [Archiv_Praemien_2023.zip]="https://bag-files.opendata.swiss/owncloud/index.php/s/Brbwzs4kWPP83Qm/download"
-  [Archiv_Praemien_2024.zip]="https://bag-files.opendata.swiss/owncloud/index.php/s/5qptAxHT7Pii9WL/download"
-)
-
-last_year=2025
-last_url_ch="https://bag-files.opendata.swiss/owncloud/index.php/s/83Vtexg1buoOk6M/download"
-last_url_eu="https://bag-files.opendata.swiss/owncloud/index.php/s/xfkW838taWpI7XX/download"
-
+# Exportar variables automáticamente
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-tmp_dir="$script_dir/datasource/praemien_tmp"
+set -a
+source "$script_dir/.env"
+set +a
 
+declare -A files
+IFS=';' read -ra entries <<< "$DATASET_ARCHIVES"
+for entry in "${entries[@]}"; do
+  key="${entry%%|*}"
+  val="${entry#*|}"
+  files["$key"]="$val"
+done
+
+last_year="$DATASET_LAST_YEAR"
+last_url_ch="$DATASET_LAST_URL_CH"
+last_url_eu="$DATASET_LAST_URL_EU"
+
+tmp_dir="$script_dir/datasource/praemien_tmp"
 mkdir -p "$tmp_dir"
 
 echo "📥 Downloading ZIP files..."
@@ -54,6 +48,26 @@ for zipfile in *.zip; do
     if [[ "$file" != "$target_dir/$clean_name" ]]; then
       mv "$file" "$target_dir/$clean_name"
     fi
+  done
+
+  # 🔥 Normalize encoding and separator of extracted CSVs
+  find "$target_dir" -type f -iname "*.csv" | while read -r csvfile; do
+    encoding=$(file -bi "$csvfile" | sed 's/.*charset=//')
+    tmpfile="${csvfile}.tmp"
+
+    if [[ "$encoding" != "utf-8" ]]; then
+      iconv -f "$encoding" -t utf-8 "$csvfile" > "$tmpfile"
+    else
+      cp "$csvfile" "$tmpfile"
+    fi
+
+    sep=$(head -n 1 "$tmpfile" | grep -q ";" && echo ";" || echo ",")
+    if [[ "$sep" == "," ]]; then
+      sed 's/,/;/g' "$tmpfile" > "$csvfile"
+    else
+      mv "$tmpfile" "$csvfile"
+    fi
+    rm -f "$tmpfile"
   done
 done
 cd ..
