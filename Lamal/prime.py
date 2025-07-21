@@ -113,6 +113,28 @@ class Prime:
         )
         df["Region"].fillna(0)
 
+    def __adaptLegacy(self, df, year, isCH):
+        print(f" CSV of {year} is legacy. Adapting")
+        df.columns = ["Kanton", "Versicherer", "Year", "B"]
+        df["Hoheitsgebiet"] = "CH" if isCH else "EU"
+        df["Region"] = "0"
+        df["Altersklasse"] = "ERW"
+        df["Unfalleinschluss"] = "1"
+        df["Franchise"] = "300"
+        df["Prime"] = df["B"]
+        df["isBaseP"] = 1
+        df["isBaseF"] = 1
+        df["Altersuntergruppe"] = "E1"
+        df["Tarifbezeichnung"] = ""
+        df["Tariftyp"] = "TAR-BASE"
+        df["Tarif"] = "Base"
+        df = df.reindex(columns=[
+            "Year", "Versicherer", "Kanton", "Hoheitsgebiet", "Region",
+            "Altersklasse", "Unfalleinschluss", "Franchise", "Prime",
+            "isBaseP", "isBaseF", "Altersuntergruppe", "Tarifbezeichnung",
+            "Tariftyp", "Tarif"])
+        return df
+
     def __cleanKanton(df):
         # Replace
         #  ['A' 'B' 'BG' 'CY' 'CZ' 'D' 'DK' 'E' 'EST' 'F' 'FIN' 'GB' 'GR' 'H' 'I'
@@ -161,6 +183,11 @@ class Prime:
         )
 
     def __cleanData(self, year, df, isCH):
+        if df.shape[1] <= 4:
+            return self.__adaptLegacy(df, year, isCH)
+
+        if df.get("C_ID") is not None and df.get("C_ID")[len(df) - 1] == "CH":
+            df.drop(df[df["C_ID"] == "CH"].index, inplace=True)
         # Remove latest line if it contains "CH"
         if df.get("C_ID") is not None:
             if df.get("C_ID")[len(df) - 1] == "CH":

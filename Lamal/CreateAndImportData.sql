@@ -1,22 +1,5 @@
 
-
-# Replace XXXXXXXXXXXXXXXXXXXXXX with your password.
-# The data will be imported in the database called "lamal"
-# Works with MySQL and MariaDB - could probably be adapted to other databases.
-# Copy first data from the export folder to "/tmp/" and chmod 777 /tmp/*.csv to give access to mysql.
-# Depending on your usage, don't hesitate to create other indexes as we have lot of data.
-
-
-# Create database
-CREATE DATABASE lamal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-# Create user
-CREATE USER 'lamal'@'localhost' IDENTIFIED BY 'XXXXXXXXXXXXXXXXXXXXXX';
-GRANT ALL PRIVILEGES ON lamal.* TO lamal@localhost;
-
-
-
-# ---------------------------
-use lamal
+USE lamal;
 
 # Create and import data
 DROP TABLE IF EXISTS assurance;
@@ -76,19 +59,19 @@ CREATE TABLE lamal(
 );
 
 
-LOAD DATA INFILE '/tmp/assurances.csv'  INTO TABLE assurance FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+LOAD DATA LOCAL INFILE '/tmp/assurances.csv'  INTO TABLE assurance FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
 
-LOAD DATA INFILE '/tmp/communes.csv' INTO TABLE communes FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
-LOAD DATA INFILE '/tmp/communeseu.csv' INTO TABLE communes FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
-ALTER TABLE `communes` ADD INDEX(`ofsId`); 
+LOAD DATA LOCAL INFILE '/tmp/communes.csv' INTO TABLE communes FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+LOAD DATA LOCAL INFILE '/tmp/communeseu.csv' INTO TABLE communes FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+ALTER TABLE `communes` ADD INDEX(`ofsId`);
 
-LOAD DATA INFILE '/tmp/region.csv' INTO TABLE region FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
-ALTER TABLE `region` ADD INDEX(`ofsId`); 
+LOAD DATA LOCAL INFILE '/tmp/region.csv' INTO TABLE region FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+ALTER TABLE `region` ADD INDEX(`ofsId`);
 
-LOAD DATA INFILE '/tmp/lamal.csv' INTO TABLE lamal FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+LOAD DATA LOCAL INFILE '/tmp/lamal.csv' INTO TABLE lamal FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
 
 ALTER TABLE lamal DROP COLUMN id;
-ALTER TABLE `lamal` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`); 
+ALTER TABLE `lamal` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
 
 
 DROP TABLE IF EXISTS lamallight;
@@ -113,7 +96,7 @@ ALTER TABLE
     DROP COLUMN isBaseP,
     DROP COLUMN tarif,
     DROP COLUMN pays;
-ALTER TABLE `lamallight` ADD INDEX(`canton`); 
+ALTER TABLE `lamallight` ADD INDEX(`canton`);
 
 delete from
     lamallight
@@ -150,7 +133,7 @@ where
     );
 
 
-ALTER TABLE `assurance` ADD INDEX(`assuranceId`); 
+ALTER TABLE `assurance` ADD INDEX(`assuranceId`);
 
 
 # Be sure that all tables are optimized
@@ -159,5 +142,3 @@ optimize table communes;
 optimize table lamal;
 optimize table lamallight;
 optimize table region;
-
-
