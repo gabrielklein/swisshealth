@@ -1,5 +1,6 @@
 **/__pycache__
 Passwords.txt
-Lamal/build/datasource/20*/
-Lamal/build/datasource/config.json
-Lamal/build/export
+datasets/Lamal/build/datasource/20*/
+datasets/Lamal/build/datasource/config.json
+datasets/Lamal/build/export/*
+!datasets/Lamal/build/export/.gitkeep

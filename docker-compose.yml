@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  lamal-generator:
+    build:
+      context: datasets/Lamal/build
+      dockerfile: Dockerfile.generator
+    volumes:
+      - ./datasets/Lamal/build/export:/app/export
+    profiles: ["Lamal"]
+    command: ["pipenv", "run", "/app/utils/generate_dataset.sh"]
+
+  lamal-mariadb:
+    image: mariadb:latest
+    depends_on:
+      - lamal-generator
+    container_name: lamal-db
+    volumes:
+        - ./datasets/Lamal/build/CreateAndImportData.sql:/docker-entrypoint-initdb.d/init.sql
+        - ./datasets/Lamal/build/export:/app/export
+    restart: unless-stopped
+    profiles: ["Lamal"]
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PsASSWORD}
+    ports:
+      - "3306:3306"
+    command: --local-infile=1
