@@ -12,7 +12,7 @@ class Prime:
 
     # Load configuration file
     def loadConfig():
-        f = open("datasource/config.json")
+        f = open("../datasource/config.json")
         config = json.load(f)
         f.close()
         return config
@@ -392,14 +392,14 @@ class Prime:
             "isBASE_F": "str",
         }
         dfCH = pandas.read_csv(
-            "datasource/" + filePrime["path_ch"],
+            "../datasource/" + filePrime["path_ch"],
             sep=filePrime["sep"],
             encoding=filePrime["encoding_ch"],
             dtype=dty,
             keep_default_na=False,
         )
         dfEU = pandas.read_csv(
-            "datasource/" + filePrime["path_eu"],
+            "../datasource/" + filePrime["path_eu"],
             sep=filePrime["sep"],
             encoding=filePrime["encoding_eu"],
             dtype=dty,

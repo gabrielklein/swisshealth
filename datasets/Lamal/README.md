@@ -1,38 +1,35 @@
 # Lamal
 
-This instruction is for linux platforms. It can probably be adapted easily to other platforms.
-
-You have to ways to prepare data.
-Either regenerate the data in the export folder, or simply use pregenerated data.
-If you are new to the project, just use "exported data"
+Theses instructions are for the Lamal Pipeline
 
 # Why do we need to pre-process data?
 
 Sadly the data is not always in the same format.
 Sometime the name is different, sometime they use UTF-8, sometime latin-1, the enums are different.
 
-This script will generate a unique format.
+This pipeline would build the dataset in an right format
 
 Please notify my if you see any errors.
 
-# You want to regenerate the data
+# Generate data
 
-If you have no reason to regenerate the data, just use "export.7z"
+Please follow the instructions on the main README.md to generate data in a full-automated way.
+
+# You want to regenerate the data (manual way)
 
 Download and prepare raw data
 
 1) Go in the "datasource" folder.
 2) Download data from https://opendata.swiss/fr/dataset/health-insurance-premiums and unzip it in different folders called 2011, 2012, ... 2025.
 3) Fix some issues with names if necessary.
-4) You have a file called "config.json", verify that all names are well defined and at the right position.
 
 Process data
 1) You need "pandas" and "numpy", on ubuntu/debian - sudo apt-get install python3-pandas python3-numpy python3-ipython
 2) You may need other libraries, please send me a mail if I forgot any.
-3) python3 process.py
+3) python3 utils/process.py
 4) Data should be available in the export folder
 
-# Import data in your mariadb or mysql database
+# Import data in your mariadb or mysql database (manual way)
 
 If you haven't generated the "export" folder. Un7zip the "export.7z" folder.
 Copy all content of this folder to the /tmp folder.

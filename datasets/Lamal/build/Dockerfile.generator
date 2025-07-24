@@ -1,0 +1,23 @@
+FROM python:3.10-slim
+
+ENV LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    PIP_NO_CACHE_DIR=1 \
+    PIPENV_VENV_IN_PROJECT=1
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        curl bash gcc build-essential \
+        libmariadb-dev libmariadb-dev-compat \
+        mariadb-client default-mysql-client \
+        gnupg file unzip && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY . .
+
+RUN pip install pipenv && pipenv install --deploy
+
+RUN chmod +x utils/generate_dataset.sh
+
+WORKDIR /app/utils

@@ -1,10 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
-# Exportar variables automáticamente
+# Environment loading
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 set -a
-source "$script_dir/.env"
+source "$script_dir/../.dataset.env"
 set +a
 
 declare -A files
@@ -19,8 +19,11 @@ last_year="$DATASET_LAST_YEAR"
 last_url_ch="$DATASET_LAST_URL_CH"
 last_url_eu="$DATASET_LAST_URL_EU"
 
-tmp_dir="$script_dir/datasource/praemien_tmp"
+tmp_dir="$script_dir/../datasource/praemien_tmp"
 mkdir -p "$tmp_dir"
+
+echo "🩹 Cleaning Export directory"
+find ../export/ ! -name '.gitkeep' ! -path '../export/' -exec rm -rf {} +
 
 echo "📥 Downloading ZIP files..."
 for filename in "${!files[@]}"; do
@@ -50,7 +53,7 @@ for zipfile in *.zip; do
     fi
   done
 
-  # 🔥 Normalize encoding and separator of extracted CSVs
+  # Normalize encoding and separator of extracted CSVs
   find "$target_dir" -type f -iname "*.csv" | while read -r csvfile; do
     encoding=$(file -bi "$csvfile" | sed 's/.*charset=//')
     tmpfile="${csvfile}.tmp"
@@ -140,4 +143,12 @@ for year in */; do
 done
 
 echo "] }" >> "$output_json"
-echo "✅ Done. Metadata saved to $output_json"
+echo "Metadata saved to $output_json"
+echo "📦 Preparing CSV Datasets..."
+
+if python3 -W ignore $script_dir/process.py; then
+    echo "✅ Done! Datasets ready in build/export directory!"
+else
+    echo "❌ Error executing process.py"
+    exit 1
+fi
