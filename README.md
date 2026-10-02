@@ -1,6 +1,6 @@
-# 🇨🇭 Lamal|Tarmed – Swiss Health Insurance Data Analysis
+# 🇨🇭 Lamal – Swiss Health Insurance Data Analysis
 
-This project automates the **download**, **standardization**, **database import**, and **data representation** of Switzerland Health insurances related-data from open sources like [opendata.swiss](https://opendata.swiss). It processes all available data o the current year and prepares it for use in analytics or dashboards.
+This project downloads and standardizes Swiss health-insurance data, imports it into MariaDB, and prepares it for analytics. The Lamal pipeline currently includes premium data from 2011 through 2027.
 
 ---
 
@@ -15,7 +15,7 @@ This project automates the **download**, **standardization**, **database import*
 
 ## 🏗️ Project structure
 
-The idea is to have full and useful pipelines inside the "datasets" directory. Each directory contains all the needed instructions for
+Each directory under `datasets` contains the instructions and files for a complete data pipeline:
 
 1. Downloading the needed files / databases for building a dataset
 2. Cooking the dataset, mixing and transforming data
@@ -24,44 +24,36 @@ The idea is to have full and useful pipelines inside the "datasets" directory. E
 ## 🔁 Current pipelines
 
 1. Lamal
-2. Tarmed (in progress)
 
 ## 🚀 Quickstart (Dockerized)
 
 The easiest way to run everything is using Docker Compose. It handles dataset generation and database provisioning automatically.
 
 
-### 1. Build and start the system:
+### Build and start the Lamal pipeline
 
-#### Launch full stack (Dataset building, )
 ```bash
-docker compose --profile PIPELINE_NAME up -d
+docker compose --profile Lamal up -d
 ```
 
-f.e: `docker compose --profile Lamal up -d`
-
-What this does:
-- Downloads all raw data files
-- Unzips and cleans them
-- Standardizes everything into `.csv` format. You can find the results (the raw CSV Files) in build/export of the pipeline directory
-- Starts a MariaDB container
-- Imports the data using
+This downloads and prepares the source data, writes standardized CSV files to `datasets/Lamal/build/export`, then starts MariaDB and imports the files.
 
 ---
 
 ## ⚗️ Environment Configuration
 
-All important variables are declared in `.dataset.env`. of your pipeline directory. Example:
+The Lamal download settings are in `datasets/Lamal/build/.dataset.env`. The latest premium year and its CH/EU download URLs are configurable there; they are currently set to 2027.
 
 ```.dataset.env
-# Dataset archive URLs
-export DATASET_ARCHIVES="Archiv_Praemien_2011.zip|https://...;Archiv_Praemien_2012.zip|https://...;..."
-export DATASET_LAST_YEAR="2025"
+# Historical archive URLs
+export DATASET_ARCHIVES="Archiv_Praemien_2011.zip|https://...;..."
+# Current premium CSVs
+export DATASET_LAST_YEAR="2027"
 export DATASET_LAST_URL_CH="https://..."
 export DATASET_LAST_URL_EU="https://..."
 ```
 
-On the .env file of the main directory, you can also find some environment variables for configuring docker compose vars. :
+The root `.env` file contains the MariaDB credentials used by Docker Compose:
 
 ```.env
 # DB Credentials
@@ -75,33 +67,30 @@ MYSQL_PASSWORD=lamal
 
 ## 🔧 Manual Mode (without Docker)
 
-If you want to build the dataset without Docker, follow this instructions:
+To build the dataset without Docker:
 
 ### 1. Install dependencies
 
 ```bash
 sudo apt-get install python3 python3-pip unzip pipenv
-# Go to your build dataset directory (cd datasets/Lamal/build)
-pip install pipenv (not necessary if pipenv is installed already)
+cd datasets/Lamal/build
 pipenv install
 ```
 
 ### 2. Run the pipeline
 
 ```bash
-# Go to your build dataset directory (cd datasets/Lamal/build)
 pipenv run bash utils/generate_dataset.sh
 ```
+
+To process source files already downloaded, run `python3 process.py` from `datasets/Lamal/build/utils`. Complete year folders containing both CH and EU CSVs are picked up automatically.
 
 ### 3. Launch MariaDB locally and import the data
 
 - Start a local MariaDB/MySQL instance.
-- Modify the paths inside CreateAndImportData.sql for pointing to the export directory
-  ```bash
-  Example: /app/export/assurances.csv'
-  ```
 - Run the import script manually:
   ```bash
+  cd datasets/Lamal/build
   mysql -u lamal -p lamal < CreateAndImportData.sql
   ```
 
@@ -109,9 +98,4 @@ pipenv run bash utils/generate_dataset.sh
 
 ## 🧠 Why preprocess the data?
 
-Swiss federal health data is inconsistent:
-- Different encodings (UTF-8, latin-1)
-- Column names change over time
-- Values and enums are not standardized
-
-This pipeline ensures all years conform to a unified schema for further processing.
+Swiss federal health data changes format over time. Encodings, column names, and coded values can differ between years, so the pipeline normalizes them into one schema.

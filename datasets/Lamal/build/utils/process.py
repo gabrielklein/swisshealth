@@ -16,7 +16,7 @@ os.mkdir(f"{dest_dir}")
 print("Load config and data")
 config = Prime.loadConfig()
 assurances = pandas.read_csv("../datasource/assurances.csv", sep="\t", encoding="utf8")
-region = pandas.read_csv("../datasource/region2024.csv", sep=",", encoding="utf8")
+region = pandas.read_csv("../datasource/region2027.csv", sep=",", encoding="utf8")
 communes = pandas.read_csv("../datasource/PLZO_CSV_WGS84.csv", sep=";", encoding="utf8")
 communeseu = pandas.read_csv("../datasource/communeseu.csv", sep=";", encoding="utf8")
 

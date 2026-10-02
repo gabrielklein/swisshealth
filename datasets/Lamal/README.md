@@ -1,39 +1,35 @@
-# Lamal
+# Lamal pipeline
 
-Theses instructions are for the Lamal Pipeline
+The Lamal pipeline downloads, normalizes, and imports Swiss mandatory health-insurance premium data. Premiums from 2011 through 2027 are supported.
 
-# Why do we need to pre-process data?
+## Generate the dataset
 
-Sadly the data is not always in the same format.
-Sometime the name is different, sometime they use UTF-8, sometime latin-1, the enums are different.
+From the repository root, follow the Docker or manual setup in the [main README](../../README.md). The pipeline downloads historical archives and the latest CH/EU premium files, normalizes them, and writes output CSVs to `build/export`.
 
-This pipeline would build the dataset in an right format
+## Process files you already downloaded
 
-Please notify my if you see any errors.
+Place each year's CH and EU premium files in `build/datasource/<year>/` as `Praemien_CH.csv` and `Praemien_EU.csv`. Then run:
 
-# Generate data
+```bash
+cd datasets/Lamal/build/utils
+python3 process.py
+```
 
-Please follow the instructions on the main README.md to generate data in a full-automated way.
+Complete year folders are discovered automatically, including years missing from the generated `config.json`. The standardized output is written to `datasets/Lamal/build/export`.
 
-# You want to regenerate the data (manual way)
+## Source data
 
-Download and prepare raw data
+- Premium CSVs and historical archives: [opendata.swiss health-insurance premiums](https://opendata.swiss/en/dataset/health-insurance-premiums)
+- Swiss gazetteer: [swisstopo official gazetteer](https://www.swisstopo.admin.ch/de/amtliches-ortschaftenverzeichnis)
+- Insurer registry: [BAG list of authorized health insurers](https://www.bag.admin.ch/de/verzeichnisse-der-zugelassenen-kranken-und-rueckversicherer)
+- Premium-region assignments: [BAG premium regions](https://www.bag.admin.ch/de/krankenversicherung-praemienregionen)
 
-1) Go in the "datasource" folder.
-2) Download data from https://opendata.swiss/fr/dataset/health-insurance-premiums and unzip it in different folders called 2011, 2012, ... 2025.
-3) Fix some issues with names if necessary.
+The supporting files in `build/datasource` use the formats expected by the processing and import scripts. The premium-region lookup is versioned by year (currently `region2027.csv`).
 
-Process data
-1) You need "pandas" and "numpy", on ubuntu/debian - sudo apt-get install python3-pandas python3-numpy python3-ipython
-2) You may need other libraries, please send me a mail if I forgot any.
-3) python3 utils/process.py
-4) Data should be available in the export folder
+## Import into MariaDB or MySQL
 
-# Import data in your mariadb or mysql database (manual way)
+After generating the CSVs, start MariaDB/MySQL and run the import script from `datasets/Lamal/build`:
 
-If you haven't generated the "export" folder. Un7zip the "export.7z" folder.
-Copy all content of this folder to the /tmp folder.
-Make all data available to mysql process using : chmod 777 /tmp/*.csv
-
-You can import all data in a mysql/mariadb database using this script.
-Connect to mysql and run the following sql requests one after the other: CreateAndImportData.sql
+```bash
+mysql -u lamal -p lamal < CreateAndImportData.sql
+```

@@ -27,7 +27,7 @@ CREATE TABLE communes(
     canton VARCHAR(5),
     `long` FLOAT NOT NULL,
     lat FLOAT NOT NULL,
-    langue VARCHAR(2) NOT NULL
+    langue VARCHAR(16) NOT NULL
 );
 
 CREATE TABLE region(
@@ -82,31 +82,31 @@ CREATE TABLE lamal_raw(
 -- =========================
 -- Import data in raw.
 -- =========================
-LOAD DATA INFILE '/app/export/assurances.csv'
+LOAD DATA INFILE '/var/lib/mysql/export/assurances.csv'
 INTO TABLE assurance_raw
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-LOAD DATA INFILE '/app/export/communes.csv'
+LOAD DATA INFILE '/var/lib/mysql/export/communes.csv'
 INTO TABLE communes_raw
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-LOAD DATA INFILE '/app/export/communeseu.csv'
+LOAD DATA INFILE '/var/lib/mysql/export/communeseu.csv'
 INTO TABLE communes_raw
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-LOAD DATA INFILE '/app/export/region.csv'
+LOAD DATA INFILE '/var/lib/mysql/export/region.csv'
 INTO TABLE region_raw
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-LOAD DATA INFILE '/app/export/lamal.csv'
+LOAD DATA INFILE '/var/lib/mysql/export/lamal.csv'
 INTO TABLE lamal_raw
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
